@@ -7,11 +7,17 @@ jobs:
     defaults:
       run:
         working-directory: sample/build
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [DX12, VK]
+
     steps:
       - uses: actions/checkout@v2
+      - uses: microsoft/setup-msbuild@v1.0.2
       - run: ./GenerateSolutions.bat
-      - run: msbuild CAS_Sample_DX12/VK.sln
+      - run: msbuild ${{ matrix.project }}/${{ matrix.project }}.sln
       - uses: actions/upload-artifact@v2
         with:
           name: svg2png-windows
-          path: sample\build\CAS_Sample*\*.exe
+          path: sample\build\*\*.exe
