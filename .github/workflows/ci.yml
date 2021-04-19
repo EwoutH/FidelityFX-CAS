@@ -1,0 +1,17 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  examples:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: sample/build
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./GenerateSolutions.bat
+      - run: msbuild CAS_Sample_DX12/VK.sln
+      - uses: actions/upload-artifact@v2
+        with:
+          name: svg2png-windows
+          path: sample\build\CAS_Sample*\*.exe
